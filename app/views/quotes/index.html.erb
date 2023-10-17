@@ -1,10 +1,24 @@
+<%= turbo_stream_from current_company, "quotes" %>
+
 <main class="container">
-  <div class="header">
+  <div data-controller="hi" class="header">
     <h1>Quotes</h1>
-    <%= link_to "New quote",
-                new_quote_path,
-                class: "btn btn--primary" %>
+    <%= link_to "New quote", new_quote_path,
+      class: "btn btn--primary",
+      data: { turbo_frame: dom_id(Quote.new) } %>
   </div>
 
-  <%= render @quotes %>
+  <%# équivaut à @quotes.each do |quote|
+    render quote
+    ou
+    render partial 'quote', locals: { quote: quote }
+  end %>
+
+  <%= turbo_frame_tag Quote.new %>
+
+  <%= turbo_frame_tag "quotes" do %>
+    <%= render "quotes/empty_state" %>
+    <%= render @quotes %>
+  <% end %>
+
 </main>
